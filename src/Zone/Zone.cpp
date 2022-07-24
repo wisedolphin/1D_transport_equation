@@ -43,7 +43,7 @@ void Zone::Fluxes_CIR(double const lambda)
 	}
 }
 
-void Zone::Fluxes_MUSCULE(double const lambda, double const dx)
+void Zone::Fluxes_MUSCL(double const lambda, double const dx)
 {
     std::vector<double> field_face(2*N_+1);
     field_face.front() = field_.back();

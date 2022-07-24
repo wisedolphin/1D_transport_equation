@@ -2,12 +2,12 @@
 #include <vector>
 #include <exception>
 #include <iostream>
-#include "../config/Config.h"
+#include "../Config/Config.h"
 #include <cmath>
 
 //! Class for field and fluxes processing
 /*!
-    erge
+
 */
 class Zone
 {
@@ -43,6 +43,7 @@ public:
 		}
 		IC_apply(IC_function);
 		BC_apply(left_bound_val, right_bound_val);
+
 		Fluxes_CIR(lambda);
 	}
 
@@ -65,12 +66,12 @@ public:
     */
     void Fluxes_CIR(double const lambda);
 
-    //! Calculation of fluxes with Muscule scheme (Kolgan reconstruction)
+    //! Calculation of fluxes with MUSCL scheme (Kolgan reconstruction)
     /*!
         \param lambda constant tranport coeffition
         \param dx space discretization
     */
-    void Fluxes_MUSCULE(double const lambda, double const dx);
+    void Fluxes_MUSCL(double const lambda, double const dx);
 
     //! Next step calculation
     /*!
