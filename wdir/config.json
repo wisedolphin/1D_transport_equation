@@ -1,0 +1,39 @@
+{
+    "Fluid properties" :
+    {
+        "Tranport coeffition" : 0.5
+    },
+    "Domain settings" :
+    {
+        "Number of real cells" : 1000,
+        "Calculation domain length" : 100
+    },
+    "Time step settings" :
+    {
+        "CFL number" : 0.5,
+        "Iteration number" : 100
+    },
+    "BC settings" :
+    {
+        "Leftside value" : 0,
+        "Rightside value" : 0
+    },
+    "IC settings" :
+    {
+        "U value": 1.0,
+        "Start cooordinate" : 10.0,
+        "End coordinate" : 20.0
+    },
+    "Result settings" :
+    {
+        "Data saving frequency" : 10
+    },
+    "Schemes settings" :
+    {
+        "Fluxes approximation scheme": "CIR"
+    },
+    "Multiprocessing settings" :
+    {
+        "Treads number" : 2
+    }
+}

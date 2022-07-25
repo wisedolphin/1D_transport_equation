@@ -10,10 +10,9 @@ set(CMAKE_CXX_STANDART True)
 
 set(SOURCE_EXE src/main.cpp) #src list for exe
 
-include_directories(src/Config) #headers for project
 include_directories(src/Zone) #headers for project
-add_subdirectory(src/Config) #subproject adding
 add_subdirectory(src/Zone) #subproject adding
 add_executable(1D_transport_equation ${SOURCE_EXE}) # exe creation with "ConwayLifeGame" name
-target_link_libraries(1D_transport_equation Config Zone) # linking "ConwayLifeGame" & "World_field"
+target_link_libraries(1D_transport_equation Zone) # linking "ConwayLifeGame" & "World_field"
+target_link_libraries(1D_transport_equation -fopenmp)
 

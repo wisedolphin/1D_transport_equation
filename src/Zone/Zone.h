@@ -20,8 +20,6 @@ class Zone
     //! Fluxes on cells faces. The size is N_+1
 	std::vector<double> flux_;		// fluxes - for real cells
 public:
-    //! Initial condition function
-	using IC = double (*)(double x);
     //! Zone Constructor
     /*!
         \param N a real cells count
@@ -30,7 +28,14 @@ public:
         \param left_bound_val a letf fiction cell boundary condition
         \param left_bound_val a right fiction cell boundary condition
     */
-    Zone(int N, double const lambda, IC IC_function, double const& left_bound_val, double const& right_bound_val) :N_(N)
+    Zone(int N
+         , double const domain_length
+         , double const lambda
+         , IC_s IC
+         , double const& left_bound_val
+         , double const& right_bound_val
+         )
+        :N_(N)
 	{
 		try {
 			X_.resize(N_);
@@ -38,12 +43,18 @@ public:
 			flux_.resize(N_ + 1);
 		}
 		catch (std::bad_alloc& e) {
-			std::cout << e.what();
-			throw;
+            std::cerr << e.what();
+            std::cerr << "Zone creation failed";
+            std::abort();
 		}
-		IC_apply(IC_function);
+        int n=0;
+        for (auto &x : X_)
+        {
+            x = n*domain_length/N_;
+            ++n;
+        }
+        IC_apply(IC);
 		BC_apply(left_bound_val, right_bound_val);
-
 		Fluxes_CIR(lambda);
 	}
 
@@ -51,7 +62,7 @@ public:
     /*!
         \param IC initial conditions function(param X, result field value)
     */
-    void IC_apply(IC IC);
+    void IC_apply(IC_s IC);
 
     //! Boundaty condition applying
     /*!

@@ -15,7 +15,7 @@ double minmod(double first, double second)
     return(1/2 * sgn(first+second)*std::min(std::abs(first), std::abs(second)));
 }
 
-void Zone::IC_apply(IC IC)
+void Zone::IC_apply(IC_s IC)
 {
     // since 0 index in field_ is the left fiction cell
     // and X_[0] the first real cell
@@ -24,7 +24,7 @@ void Zone::IC_apply(IC IC)
 //#pragma omp for default(none) private(i) shared(field_, X_) schedule(dynamic)
     for (i = 0; i != N_; ++i)
 	{
-		field_.at(i + 1) = IC(X_.at(i));
+        field_.at(i + 1) =  IC.apply_IC(X_.at(i));
 	}
 }
 

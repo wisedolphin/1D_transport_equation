@@ -7,40 +7,45 @@
 namespace pt = boost::property_tree;
 
 
-struct Fluid_property
+struct Fluid_property_s
 {
     double lambda;
 };
-struct Domain_settings
+struct Domain_settings_s
 {
     int N;
     double L;
 };
-struct Time_step_settings
+struct Time_step_settings_s
 {
     double CFL;
     double NIter;
 };
-struct BC
+struct BC_s
 {
     double Uleft;
     double Uright;
 };
-struct IC
+struct IC_s
 {
     double Uval;
     double Xstart;
     double Xend;
+    double apply_IC(double X)
+    {
+        if (X>Xstart && X<Xend) {return Uval;}
+        else {return 0.0;}
+    }
 };
-struct Result
+struct Result_s
 {
     int Save_freq;
 };
-struct Scheme
+struct Scheme_s
 {
     std::string scheme_name;
 };
-struct Multiprocessing
+struct Multiprocessing_s
 {
     int threads_num;
 };
@@ -90,14 +95,14 @@ Configuration file exaple config.json:
 */
 struct config 
 {
-    Fluid_property Fluid;;
-    Domain_settings Domain;
-    Time_step_settings Timestep;
-    BC BC;
-    IC IC;
-    Result Result;
-    Scheme Scheme;
-    Multiprocessing Multiprocessing;
+    Fluid_property_s Fluid;;
+    Domain_settings_s Domain;
+    Time_step_settings_s Timestep;
+    BC_s BC;
+    IC_s IC;
+    Result_s Result;
+    Scheme_s Scheme;
+    Multiprocessing_s Multiprocessing;
 
     config(std::string abs_filepath)
 	{
@@ -134,7 +139,7 @@ struct config
         IC.Uval = json_tree.get("IC settings.U value", -1.0);
         IC.Xstart = json_tree.get("IC settings.Start cooordinate", -1.0);
         IC.Xend = json_tree.get("IC settings.End coordinate", -1.0);
-        if ((IC.Xstart - IC.Xend < Domain.L) || IC.Uval < 0) {throw std::logic_error("IC settings has non-physical meaning");}
+        if ((IC.Xstart - IC.Xend > Domain.L) || IC.Uval < 0) {throw std::logic_error("IC settings has non-physical meaning");}
         Result.Save_freq = json_tree.get("Result settings.Data saving frequency", -1);
         if (Result.Save_freq < 0){throw std::logic_error("Result settings has non-physical meaning");}
         Scheme.scheme_name = json_tree.get("Schemes settings.Fluxes approximation scheme", "CIR");
