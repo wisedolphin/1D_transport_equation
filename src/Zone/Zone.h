@@ -37,7 +37,8 @@ public:
          )
         :N_(N)
 	{
-		try {
+        //
+        try {
 			X_.resize(N_);
 			field_.resize(N_ + 2);
 			flux_.resize(N_ + 1);
@@ -45,7 +46,7 @@ public:
 		catch (std::bad_alloc& e) {
             std::cerr << e.what();
             std::cerr << "Zone creation failed";
-            std::abort();
+            exit(-1);
 		}
         int n=0;
         for (auto &x : X_)
@@ -90,5 +91,12 @@ public:
         \param dt time discretization
     */
 	void calc_next_step(double dx, double dt);
+
+    //! Saving U-field to .csv
+    /*!
+        \param work_dir_path directory of calculation processing (same as directory of config file)
+        \param iter current iteration
+    */
+    void save_field(std::string work_dir_path, int iter);
 };
 

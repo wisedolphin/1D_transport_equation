@@ -74,6 +74,29 @@ void Zone::calc_next_step(double dx, double dt)
 	std::swap(next_field, field_);
 }
 
+void Zone::save_field(std::string work_dir_path, int iter)
+{
+    // opening result-file
+    std::ofstream result;
+    std::string file_path = work_dir_path + "/" + std::to_string(iter) + ".csv";
+    result.open(file_path);
+    if(!result.good())
+    {
+        std::cerr<<"Error while opening file File "<< file_path << std::endl;
+        // TODO exception
+        // if exception catched in main then end iteration cycle and exit
+    }
+    // column headers
+    result << "X,U\n";
+    // fill column
+    for (int i = 0; i != N_; ++i )
+    {
+        // field vector is 2 elements longer than coordinate vector
+        result << X_.at(i) << "," << field_.at(i+1) << std::endl;
+    }
+    result.close();
+}
+
 
 
 

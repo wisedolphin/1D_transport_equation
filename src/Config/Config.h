@@ -6,51 +6,74 @@
 #include <boost/property_tree/json_parser.hpp>
 namespace pt = boost::property_tree;
 
-
+//! Fluid properties structure
 struct Fluid_property_s
 {
+    //! Speed of sound
     double lambda;
 };
+//! Calculation domain settings
 struct Domain_settings_s
 {
+    //! Number of cells
     int N;
+    //! Domain length
     double L;
 };
+//! Time discretization settings
 struct Time_step_settings_s
 {
+    //! CFL number
     double CFL;
+    //! Number of iterations
     double NIter;
 };
+//! Boundary conditions settings
 struct BC_s
 {
+    //! Left boudary value
     double Uleft;
+    //! Right boundary value
     double Uright;
 };
+//! Initial conditions settings
 struct IC_s
 {
+    //! Field value
     double Uval;
+    //! Starting of the Uval
     double Xstart;
+    //! Ending of the Uval
     double Xend;
+    //! Function to apply
+    //! This is the simple piecewise function
     double apply_IC(double X)
     {
         if (X>Xstart && X<Xend) {return Uval;}
         else {return 0.0;}
     }
 };
+//! Results configuration settings
 struct Result_s
 {
+    //! Saving frequancy
     int Save_freq;
 };
+//! Scheme settings
 struct Scheme_s
 {
+    //! Scheme
     std::string scheme_name;
 };
+//! Multiprocessing settings
 struct Multiprocessing_s
 {
+    //! Number of omp threads
     int threads_num;
 };
 
 //! Calculation configuration loading class
+//! Agregates configuration structures
 /*!
 Configuration file exaple config.json:
 {
@@ -112,8 +135,8 @@ struct config
         if(file.fail())
         {
             std::cerr<<"File "<< abs_filepath<< " doesnt exists!\n";
-            std::cerr<<"Aborting!\n";
-            std::abort();
+            std::cerr<<"Exiting!\n";
+            exit(-1);
         }
         else{file.close();}
         //Parsing config file
@@ -122,9 +145,18 @@ struct config
             pt::json_parser::read_json(abs_filepath, json_tree);
         }
         catch(pt::json_parser::json_parser_error &e){
-            std::cerr << e.what(); //if jsonfile isnt valid abort
-            std::abort();
+            std::cerr << "Exception thown while parsing json file\n";
+            std::cerr << e.what(); //if jsonfile isnt valid then exit
+            exit(-1);
         }
+        catch(std::exception& e){
+            std::cerr << "Standart exception thown: " << e.what();
+            exit(-1);
+        }
+        catch(...){
+            std::cerr << "Unknown error!";
+        }
+        // Parsing json file
         Fluid.lambda = json_tree.get("Fluid properties.Tranport coeffition", -1.0);
         if (Fluid.lambda < 0) {throw std::logic_error("Lambda has non-physical meaning");}
         Domain.L = json_tree.get("Domain settings.Calculation domain length", -1.0);
