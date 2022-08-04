@@ -1,7 +1,7 @@
 # 1D_transport_equation
 In progress...
 
-This is one dimentional transport equation solver.
+This is one dimensional transport equation solver.
 
 **Stack**
 
