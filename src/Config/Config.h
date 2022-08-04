@@ -134,7 +134,7 @@ struct config
         file.open(abs_filepath, std::ifstream::in);
         if(file.fail())
         {
-            std::cerr<<"File "<< abs_filepath<< " doesnt exists!\n";
+            std::cerr<<"File "<< abs_filepath << " doesnt exists!\n";
             std::cerr<<"Exiting!\n";
             exit(-1);
         }

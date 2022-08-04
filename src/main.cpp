@@ -2,9 +2,8 @@
 #include "Zone/Zone.h"
 #include <string>
 #include <omp.h>
-#include <stdexcept>
 #include <iostream>
-#include <filesystem>
+
 
 
 int main(int argc, char* argv[])
@@ -14,7 +13,7 @@ int main(int argc, char* argv[])
     if (argc!=2)
     {
         std::cout << "Pass working dir path as the first argument\n";
-        std::cout << "Exapmle: ." << argv[0] << "application.exe \"/home/work_dir\"\n";
+        std::cout << "Exapmle: .\\" << argv[0] << " \"/home/work_dir\"\n";
         exit(-1);
 
     }
@@ -36,11 +35,21 @@ int main(int argc, char* argv[])
               );
     //iteration cycle
     int iter = 0;
+    zone.save_field(work_dir_path, iter);
     while (iter < config.Timestep.NIter)
     {
-
+        ++iter;
+        // TODO choose fluxes approx through config
+        //zone.Fluxes_CIR(config.Fluid.lambda);
+        zone.Fluxes_MUSCL(config.Fluid.lambda, config.Domain);
+        zone.calc_next_step(config.Domain, config.Fluid, config.Timestep);
+        if (iter % config.Result.Save_freq == 0)
+        {
+            zone.save_field(work_dir_path, iter);
+        }
+        zone.BC_apply(config.BC.Uleft, config.BC.Uright);
     }
-
+    std::cout << "All done!";
 
 	return 0;
 }

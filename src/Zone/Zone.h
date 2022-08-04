@@ -83,14 +83,14 @@ public:
         \param lambda constant tranport coeffition
         \param dx space discretization
     */
-    void Fluxes_MUSCL(double const lambda, double const dx);
+    void Fluxes_MUSCL(double const lambda, Domain_settings_s Domain);
 
     //! Next step calculation
     /*!
         \param dx space discretization
         \param dt time discretization
     */
-	void calc_next_step(double dx, double dt);
+	void calc_next_step(Domain_settings_s Domain, Fluid_property_s Fluid, Time_step_settings_s Timestep);
 
     //! Saving U-field to .csv
     /*!
